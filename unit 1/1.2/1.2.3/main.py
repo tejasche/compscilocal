@@ -12,19 +12,28 @@ wn.addshape(pear_image)
 wn.bgpic("background.gif")
 
 apple = trtl.Turtle()
+text = trtl.Turtle()
 
+text.penup()
+text.hideturtle()
 apple.penup()
 #-----functions-----
 # given a turtle, set that turtle to be shaped by the image file
-def draw_apple(active_apple):
+def drawapple(active_apple):
   active_apple.shape(pear_image)
   wn.update()
 
 def falling():
-  apple.goto(apple.xcor(), apple.ycor()-1)
+  apple.goto(apple.xcor(), apple.ycor() - 1)
+  
+def drawtext(input):
+  text.goto(apple.xcor(), apple.ycor())
+  text.write(input, font = ("Arial", 16, "normal"))
 
 #-----function calls-----
-draw_apple(apple)
+drawapple(apple)
+drawtext("a")
 wn.onkeypress(falling, "a")
+wn.listen()
 
 wn.mainloop()
