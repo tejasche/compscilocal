@@ -17,7 +17,7 @@ text = trtl.Turtle()
 text.penup()
 text.hideturtle()
 apple.penup()
-apple.speed(1)
+apple.speed(0.6)
 #-----functions-----
 # given a turtle, set that turtle to be shaped by the image file
 def drawapple(active_apple):
@@ -25,6 +25,7 @@ def drawapple(active_apple):
   wn.update()
 
 def falling():
+  text.clear()
   apple.goto(apple.xcor(), apple.ycor() - 300)
   
 def drawtext(input):
@@ -34,9 +35,7 @@ def drawtext(input):
 #-----function calls-----
 drawapple(apple)
 drawtext("A")
-
-if wn.onkeypress(falling, "a"):
-  text.clear()
+wn.onkeypress(falling, "a")
 
 wn.listen()
 wn.mainloop()
