@@ -45,6 +45,9 @@ def newletter():
 def newturtle(apple):
 	apple.shape(apple_image)
 	drawtext(newletter())
+	wn.update()
+ 
+	
 
 #-----function calls-----
 drawapple(apple)
