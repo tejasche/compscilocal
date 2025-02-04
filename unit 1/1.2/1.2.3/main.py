@@ -30,15 +30,15 @@ def drawapple(active_apple):
 def falling():
 	text.clear()
 	apple.goto(apple.xcor(), apple.ycor() - 300)
-  
+
 def drawtext(input):
 	text.goto(apple.xcor() - 23, apple.ycor() - 45)
 	text.write(input, font = ("Arial", 55, "normal"))
-  
+
 def newlocation(turt):
 	if len(letters) > 0:
 		turt.goto(rand.randint(-200, 200), rand.randint(-200, 200))
-	
+
 def newletter():
 	return letters.pop(rand.randint(0, len(letters) - 1))
 
@@ -46,9 +46,9 @@ def newturtle(apple):
 	apple.shape(apple_image)
 	drawtext(newletter())
 	wn.update()
- 
-	
 
+	for i in range(0, len(letters)):
+ 
 #-----function calls-----
 drawapple(apple)
 drawtext("A")
