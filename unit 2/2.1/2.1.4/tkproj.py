@@ -7,6 +7,10 @@ root = tk.Tk()
 root.wm_geometry("225x100")
 root.title("Authorization")
 
+# Add this code before the code that creates your "Login" button
+bt_image = tk.PhotoImage(file="button2.gif")
+bt_image = bt_image.subsample(10,10)
+
 # create empty frame
 frame_auth = tk.Frame(root, bg = "white", width = 225, height = 100)
 frame_auth.grid(row = 0, column = 0)
@@ -32,7 +36,7 @@ ent_username.grid(row = 0, column = 1)
 ent_password = tk.Entry(frame_login, bd = 3)
 ent_password.grid(row = 1, column = 1)
 
-btn_login = tk.Button(frame_login, text = "Login", width = 10, command = test_my_button)
+btn_login = tk.Button(frame_login, text = "Login", command = test_my_button, image = bt_image)
 btn_login.grid(row = 2, column = 0, columnspan = 2)
 
 
