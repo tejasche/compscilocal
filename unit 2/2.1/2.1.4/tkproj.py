@@ -12,8 +12,8 @@ bt_image = tk.PhotoImage(file="button2.gif")
 bt_image = bt_image.subsample(10,10)
 
 # create empty frame
-frame_auth = tk.Frame(root, bg = "white", width = 225, height = 100)
-frame_auth.grid(row = 0, column = 0)
+frame_auth = tk.Frame(root, width = 225, height = 100)
+frame_auth.grid(row = 0, column = 0, sticky = "nsew")
 
 frame_login = tk.Frame(root)
 frame_login.grid(row = 0, column = 0)
@@ -22,7 +22,7 @@ frame_login.tkraise()
 def test_my_button():
     frame_auth.tkraise()
     authtext = ent_password.get()
-    auth_label.config(text = authtext)
+    auth_label.config(text = f"Password: {authtext}")
     
 lbl_username = tk.Label(frame_login, text = 'Username:', font = "Courier")
 lbl_username.grid(row = 0, column = 0)
