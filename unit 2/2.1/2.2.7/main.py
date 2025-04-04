@@ -76,11 +76,8 @@ def calculate():
 
 def clearhistory():
     global history, historyframe
-    #ai start
     history = []
-    if 'historyframe' in globals() and historyframe.winfo_exists():
-        historyframe.destroy()
-    #ai end
+    historyframe.destroy()
 
     calculateframe.tkraise()
     inputentry.config(state="normal")
@@ -104,8 +101,8 @@ def showhistory():
 
 #ai start
     Button(historyframe, text = "Back", command = lambda: [historyframe.destroy(), calculateframe.tkraise()], width = 50).pack(anchor = "n")
-    Button(historyframe, text = "Clear History", command = clearhistory, width = 50).pack(anchor = "s")
 #ai end
+    Button(historyframe, text = "Clear History", command = clearhistory, width = 50).pack(anchor = "s")
 
 mainframe()
 window.mainloop()
