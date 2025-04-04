@@ -1,70 +1,12 @@
 from tkinter import *
 
 window = Tk()
-window.geometry("320x260")
+window.geometry("320x255")
 window.title("Calculator")
 window.resizable(False, False)
 
 number = ""
 history = []
-
-def mainframe():
-    global calculateframe
-    
-    calculateframe = Frame(window, width = 320, height = 260, bg = "teal")
-    calculateframe.place(x = 0, y = 0)
-    
-mainframe()
-
-def updatefield(value):
-    global number
-    number += str(value)
-    input.config(state = "normal")
-    input.delete(0, END)
-    input.insert(0, number)
-    input.config(state = "readonly")
-
-def clearfield():
-    global number
-    number = ""
-    input.config(state = "normal")
-    input.delete(0, END)
-    input.config(state = 'readonly')
-
-def calculate():
-    global number, history
-    try:
-        result = eval(number)
-        history.append(f"{number} = {result}")
-        number = str(result)
-        input.config(state = "normal")
-        input.delete(0, END)
-        input.insert(0, number)
-        input.config(state = "readonly")
-        
-    except Exception as e:
-        input.config(state = "normal")
-        input.delete(0, END)
-        input.insert(0, "Error")
-        input.config(state = "readonly")
-        number = ""
-
-def showhistory():
-    historyframe = Frame(calculateframe, width = 320, height = 260, bg = "teal")
-    historyframe.place(x = 0, y = 0)
-    historyframe.pack_propagate(False)
-
-    for calc in history:
-        def usehistory(value = calc.split(" = ")[1]):
-            #value.strip()
-            updatefield(value)
-            
-        Button(historyframe, text = calc, command = usehistory, width = 30).pack(pady = 5)
-        
-    Button(historyframe, text = "Back", command = mainframe, width = 50).pack(anchor = "s")
-
-input = Entry(calculateframe, font = ("Arial", 18), width = 20, state = 'readonly')
-input.grid(row = 0, column = 0, columnspan = 4, padx = 10, pady = 10)
 
 #ai start
 buttons = [
@@ -76,19 +18,94 @@ buttons = [
 ]
 #ai end
 
-for btn_text, row, col in buttons:
-    if btn_text == "=":
-        Button(calculateframe, text = btn_text, width = 10, height = 2, command = calculate).grid(row = row, column = col)
+calculateframe = Frame(window, width = 320, height = 255, bg = "teal")
+calculateframe.place(x = 0, y = 0)
 
-    elif btn_text == "C":
-        Button(calculateframe, text = btn_text, width = 10, height = 2, command = clearfield).grid(row = row, column = col)
+def mainframe():
+    global inputentry
+    inputentry = Entry(calculateframe, font = ("Arial", 18), width = 20, state = 'readonly')
+    inputentry.grid(row = 0, column = 0, columnspan = 4, padx = 10, pady = 10)
 
-    elif btn_text == "History":
-        Button(calculateframe, text = btn_text, width = 30, height = 2, command = showhistory).grid(row = row, column = col, columnspan = 4)
+    #ai start
+    for btn_text, row, col in buttons:
+    #ai end
+        if btn_text == "=":
+            Button(calculateframe, text = btn_text, width = 10, height = 2, command = calculate).grid(row = row, column = col)
+
+        elif btn_text == "C":
+            Button(calculateframe, text = btn_text, width = 10, height = 2, command = clearfield).grid(row = row, column = col)
+
+        elif btn_text == "History":
+            Button(calculateframe, text = btn_text, width = 30, height = 2, command = showhistory).grid(row = row, column = col, columnspan = 4)
+
+        else:
+            Button(calculateframe, text = btn_text, width = 10, height = 2, command = lambda value = btn_text: updatefield(value)).grid(row = row, column = col)
+            
+def updatefield(value):
+    global number
+    number += str(value)
+    inputentry.config(state = "normal")
+    inputentry.delete(0, END)
+    inputentry.insert(0, number)
+    inputentry.config(state = "readonly")
+
+def clearfield():
+    global number
+    number = ""
+    inputentry.config(state = "normal")
+    inputentry.delete(0, END)
+    inputentry.config(state = 'readonly')
+
+def calculate():
+    global number, history
+    try:
+        result = eval(number)
+        history.append(f"{number} = {result}")
+        number = str(result)
+        inputentry.config(state = "normal")
+        inputentry.delete(0, END)
+        inputentry.insert(0, number)
+        inputentry.config(state = "readonly")
+
+    except Exception as e:
+        inputentry.config(state = "normal")
+        inputentry.delete(0, END)
+        inputentry.insert(0, "Error")
+        inputentry.config(state = "readonly")
+        number = ""
+
+def clearhistory():
+    global history, historyframe
+    #ai start
+    history = []
+    if 'historyframe' in globals() and historyframe.winfo_exists():
+        historyframe.destroy()
+    #ai end
+
+    calculateframe.tkraise()
+    inputentry.config(state="normal")
+    inputentry.delete(0, END)
+    inputentry.insert(0, "History Cleared")
+    inputentry.config(state="readonly")
+
+def showhistory():
+    global historyframe
+    historyframe = Frame(calculateframe, width = 320, height = 255, bg = "teal")
+    historyframe.place(x = 0, y = 0)
+    historyframe.pack_propagate(False)
+
+    for calc in history:
+        def usehistory(value = calc.split(" = ")[1]):
+            updatefield(value)
+            historyframe.destroy()
+            calculateframe.tkraise()
+
+        Button(historyframe, text = calc, command = usehistory, width = 30).pack(pady = 5)
 
 #ai start
-    else:
-        Button(calculateframe, text = btn_text, width = 10, height = 2, command = lambda value = btn_text: updatefield(value)).grid(row = row, column = col)
-
+    Button(historyframe, text = "Back", command = lambda: [historyframe.destroy(), calculateframe.tkraise()], width = 50).pack(anchor = "n")
+    Button(historyframe, text = "Clear History", command = clearhistory, width = 50).pack(anchor = "s")
 #ai end
+
+mainframe()
 window.mainloop()
