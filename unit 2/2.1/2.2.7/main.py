@@ -14,7 +14,8 @@ buttons = [
     ('4', 2, 0), ('5', 2, 1), ('6', 2, 2), ('*', 2, 3),
     ('1', 3, 0), ('2', 3, 1), ('3', 3, 2), ('-', 3, 3),
     ('C', 4, 0), ('0', 4, 1), ('=', 4, 2), ('+', 4, 3),
-    ('History', 5, 0)
+    ('Delete', 5, 0),
+    ('History', 5, 1)
 ]
 #ai end
 
@@ -37,9 +38,13 @@ def mainframe():
 
         elif btn_text == "History":
             Button(calculateframe, text = btn_text, width = 30, height = 2, command = showhistory).grid(row = row, column = col, columnspan = 4)
+            
+        elif btn_text == "Delete":
+            Button(calculateframe, text = btn_text, width = 10, height = 2, command = delete).grid(row = row, column = col)
 
         else:
             Button(calculateframe, text = btn_text, width = 10, height = 2, command = lambda value = btn_text: updatefield(value)).grid(row = row, column = col)
+            
             
 def updatefield(value):
     global number
@@ -55,6 +60,15 @@ def clearfield():
     inputentry.config(state = "normal")
     inputentry.delete(0, END)
     inputentry.config(state = 'readonly')
+    
+def delete():
+    global number
+    number = number[:-1]
+    inputentry.config(state="normal")
+    inputentry.delete(0, END)
+    inputentry.insert(0, number)
+    inputentry.config(state="readonly")
+    
 
 def calculate():
     global number, history
