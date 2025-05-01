@@ -1,5 +1,6 @@
 from tkinter import * #imports tk
 
+theme = input("Choose theme (dark or light): ").strip().lower()
 window = Tk() #creates the main window
 window.geometry("320x255") #sets the size of the window
 window.title("Calculator") #sets the title of the window

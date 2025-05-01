@@ -1,5 +1,7 @@
 from tkinter import *
 
+theme = input("Choose theme (dark or light): ").strip().lower()
+
 window = Tk()
 window.geometry("320x255")
 window.title("Calculator")
@@ -17,31 +19,44 @@ buttons = [
     ('History', 5, 1)
 ]
 
-calculateframe = Frame(window, width = 320, height = 255, bg = "teal")
+calculateframe = Frame(window, width = 320, height = 255)
 calculateframe.place(x = 0, y = 0)
 
-def mainframe():
+def mainframe(theme):
     global inputentry
     inputentry = Entry(calculateframe, font = ("Arial", 18), width = 20, state = 'readonly')
     inputentry.grid(row = 0, column = 0, columnspan = 4, padx = 10, pady = 10)
 
-    for btn_text, row, col in buttons:
-        if btn_text == "=":
-            Button(calculateframe, text = btn_text, width = 10, height = 2, command = calculate).grid(row = row, column = col)
+    if theme == "dark":
+        window.config(bg = "black")
+        inputentry.config(bg = "gray", fg = "black")
+        calculateframe.config(bg = "black")
+        btcolor = "black"
+        textcolor = "white"
 
-        elif btn_text == "C":
-            Button(calculateframe, text = btn_text, width = 10, height = 2, command = clearfield).grid(row = row, column = col)
+    else:
+        window.config(bg = "white")
+        inputentry.config(bg = "white", fg = "black")
+        calculateframe.config(bg = "white")
+        btcolor = "lightgray"
+        textcolor = "black"
 
-        elif btn_text == "History":
-            Button(calculateframe, text = btn_text, width = 30, height = 2, command = showhistory).grid(row = row, column = col, columnspan = 4)
+    for btntext, row, col in buttons:
+        if btntext == "=":
+            Button(calculateframe, text = btntext, width = 10, height = 2, bg = btcolor, fg = textcolor, command = calculate).grid(row = row, column = col)
+
+        elif btntext == "C":
+            Button(calculateframe, text = btntext, width = 10, height = 2, bg = btcolor, fg = textcolor, command = clearfield).grid(row = row, column = col)
+
+        elif btntext == "History":
+            Button(calculateframe, text = btntext, width = 30, height = 2, bg = btcolor, fg = textcolor, command = showhistory).grid(row = row, column = col, columnspan = 4)
             
-        elif btn_text == "Delete":
-            Button(calculateframe, text = btn_text, width = 10, height = 2, command = delete).grid(row = row, column = col)
+        elif btntext == "Delete":
+            Button(calculateframe, text = btntext, width = 10, height = 2, bg = btcolor, fg = textcolor, command = delete).grid(row = row, column = col)
 
         else:
-            Button(calculateframe, text = btn_text, width = 10, height = 2, command = lambda value = btn_text: updatefield(value)).grid(row = row, column = col)
-            
-            
+            Button(calculateframe, text = btntext, width = 10, height = 2, bg = btcolor, fg = textcolor, command = lambda value = btntext: updatefield(value)).grid(row = row, column = col) # for rest of the numbers
+    
 def updatefield(value):
     global number
     number += str(value) 
@@ -56,7 +71,7 @@ def clearfield():
     inputentry.config(state = "normal")
     inputentry.delete(0, END)
     inputentry.config(state = 'readonly')
-    
+
 def delete():
     global number
     number = number[:-1]
@@ -65,7 +80,6 @@ def delete():
     inputentry.insert(0, number)
     inputentry.config(state="readonly")
     
-
 def calculate():
     global number, history
     try:
@@ -98,9 +112,17 @@ def clearhistory():
 
 def showhistory():
     global historyframe
-    historyframe = Frame(calculateframe, width = 320, height = 255, bg = "teal")
+    historyframe = Frame(calculateframe, width = 320, height = 255, bg = calculateframe.cget("bg"))
     historyframe.place(x = 0, y = 0)
     historyframe.pack_propagate(False)
+
+    bgcolor = calculateframe.cget("bg")
+    if bgcolor == "black":
+        btcolor = "black"
+        textcolor = "white"
+    else:
+        btcolor = "lightgray"
+        textcolor = "black"
 
     for calc in history:
         def usehistory(value = calc.split(" = ")[1]):
@@ -108,10 +130,10 @@ def showhistory():
             historyframe.destroy()
             calculateframe.tkraise()
 
-        Button(historyframe, text = calc, command = usehistory, width = 30).pack(pady = 5)
+        Button(historyframe, text = calc, command = usehistory, width = 30, bg = btcolor, fg = textcolor).pack(pady = 5)
 
-    Button(historyframe, text = "Back", command = lambda: [historyframe.destroy(), calculateframe.tkraise()], width = 50).pack(anchor = "n")
-    Button(historyframe, text = "Clear History", command = clearhistory, width = 50).pack(anchor = "s")
+    Button(historyframe, text = "Back", command = lambda: [historyframe.destroy(), calculateframe.tkraise()], width = 50, bg = btcolor, fg = textcolor).pack(anchor = "n")
+    Button(historyframe, text = "Clear History", command = clearhistory, width = 50, bg = btcolor, fg = textcolor).pack(anchor = "s")
 
-mainframe()
+mainframe(theme)
 window.mainloop()
